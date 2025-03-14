@@ -1,0 +1,264 @@
+-- 컬럼 연산
+SELECT
+    SALARY,
+    SALARY + 10
+FROM EMPLOYEES;
+
+
+-- 급여, 급여 + 50
+SELECT
+    EMP.SALARY AS "현재급여",
+    EMP.SALARY + 50 AS upgradeSalary
+FROM
+    EMPLOYEES EMP
+ORDER BY
+    EMP.SALARY,
+    EMP.SALARY + 50;
+ 
+-- 급여, 급여 10%증가  
+SELECT
+    EMP.SALARY AS "현재급여",
+    EMP.SALARY + EMP.SALARY * 0.1 AS "급여 10% 증가"
+FROM
+    EMPLOYEES EMP
+ORDER BY
+    EMP.SALARY,
+    EMP.SALARY + EMP.SALARY * 0.1;
+
+
+-- 급여, 급여 2배   
+SELECT
+    EMP.SALARY AS "현재급여",
+    EMP.SALARY * 2 AS "2배 인상한 급여"
+FROM
+    EMPLOYEES EMP
+ORDER BY
+    EMP.SALARY,
+    EMP.SALARY * 2;
+  
+  
+-- 컬럼끼리 합치기
+SELECT
+    EMP.JOB_ID,
+    EMP.FIRST_NAME ,
+    EMP.LAST_NAME,
+    EMP.FIRST_NAME || ' ' || EMP.LAST_NAME AS FULLNAME
+FROM
+    EMPLOYEES EMP;
+    
+-- 8000 < salary < 10000    
+SELECT
+   *
+FROM
+    EMPLOYEES
+WHERE SALARY > 8000 AND SALARY < 10000;
+
+-- salary <= 7000 or salary > 10000
+SELECT
+    *
+FROM
+    EMPLOYEES
+WHERE SALARY <= 7000 OR SALARY > 10000;
+
+-- department_id <> 80
+SELECT
+    *
+FROM
+    EMPLOYEES
+WHERE DEPARTMENT_ID <> 80;
+
+
+-- 커미션을 받으면서 2008년 이전에 입사한 사원 정보 조회
+SELECT
+    *
+FROM
+    EMPLOYEES
+WHERE COMMISSION_PCT IS NOT NULL AND HIRE_DATE < '2008/01/01';
+
+
+-- 대륙 아이디 (region_id) 가 1,3,4 값을 가진 나라 정보를 조회.
+SELECT
+    *
+FROM
+    COUNTRIES
+WHERE
+    REGION_ID IN ( 1, 3, 4 )
+ORDER BY
+    REGION_ID;
+
+
+-- between
+
+-- 이름이 G ~ H로 시작하는 사원정보
+SELECT
+    *
+FROM
+    EMPLOYEES
+WHERE
+    FIRST_NAME BETWEEN 'E' AND 'H'
+ORDER BY
+FIRST_NAME;
+
+-- '2004/05/20' AND '2007/10/10' 이전까지의 사원 정보
+SELECT
+    *
+FROM
+    EMPLOYEES
+WHERE
+    HIRE_DATE BETWEEN '2004/05/20' AND '2007/10/09'
+ORDER BY
+HIRE_DATE;
+
+
+-- in('IT_PROG', 'SA_REP', 'HR_REP')
+SELECT
+    *
+FROM
+    EMPLOYEES
+WHERE JOB_ID IN ( 'IT_PROG', 'SA_REP', 'HR_REP' );
+
+
+-- DEPARTMENT_ID IN ( 80, 50 , null)
+SELECT
+    *
+FROM
+    EMPLOYEES
+WHERE DEPARTMENT_ID IN ( 80, 50 ) OR DEPARTMENT_ID IS NULL
+ORDER BY DEPARTMENT_ID;
+
+
+-- like(_는 자리수)
+SELECT
+    *
+FROM
+    EMPLOYEES
+WHERE
+    FIRST_NAME LIKE 'K_'
+ORDER BY
+    FIRST_NAME;
+
+-- 011로 시작하는 정보
+SELECT
+    *
+FROM
+    EMPLOYEES
+WHERE
+    PHONE_NUMBER LIKE '011%';
+
+
+-- 3번째 자리가 E인 정보
+SELECT
+    *
+FROM
+    EMPLOYEES
+WHERE
+    EMAIL LIKE '__E%';
+
+
+-- Account가 들어있는 정보
+SELECT
+    *
+FROM
+    JOBS
+WHERE
+    JOB_TITLE LIKE '%Account%';
+
+
+-- 1343이 들어가지 않은 정보
+SELECT
+    *
+FROM
+    EMPLOYEES
+WHERE
+    PHONE_NUMBER NOT LIKE '%.1343.%';
+
+
+-- a,A가 들어있는 정보
+SELECT
+    *
+FROM
+    EMPLOYEES
+WHERE
+    FIRST_NAME LIKE '%a%' OR FIRST_NAME LIKE '%A%';
+    
+SELECT
+    *
+FROM
+    EMPLOYEES
+WHERE
+    REGEXP_LIKE ( FIRST_NAME,'a|A' );
+
+
+-- order by
+SELECT
+    *
+FROM
+    EMPLOYEES
+ORDER BY
+    FIRST_NAME,
+    LAST_NAME;
+
+
+-- 부서번호 오름차순
+SELECT
+    *
+FROM
+    DEPARTMENTS
+ORDER BY
+    DEPARTMENT_ID;
+
+
+-- 급여 내림차순
+SELECT
+    *
+FROM
+    EMPLOYEES
+ORDER BY
+    SALARY DESC;   
+
+
+-- 국가이름 오름차순    
+SELECT
+    *
+FROM
+    COUNTRIES
+ORDER BY
+    COUNTRY_NAME;
+
+
+-- 퇴사일 오름차순, 입사일 내림차순
+SELECT
+    *
+FROM
+    JOB_HISTORY
+ORDER BY
+    END_DATE,
+    START_DATE DESC;
+
+
+-- 급여 내림차순, 커미션 비율 오름차순
+SELECT
+    *
+FROM
+    EMPLOYEES
+ORDER BY
+    SALARY DESC,
+    COMMISSION_PCT;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
