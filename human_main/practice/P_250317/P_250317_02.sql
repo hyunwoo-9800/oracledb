@@ -18,30 +18,30 @@ FROM
 
 -- Course 테이블에서 과목코드(Course_Id),  과목명(Title), 학점수(C_Number) 로 조회해 주세요
 SELECT
-    COURSE_ID,
-    TITLE,
-    C_NUMBER
+    CUR.COURSE_ID,
+    CUR.TITLE,
+    CUR.C_NUMBER
 FROM
-    COURSE;
+    COURSE CUR;
 
 -- Course 테이블에서 과목코드(Course_Id),  과목명(Title), 학점수(C_Number) 를 과목명(title) 오름차순으로 조회
 SELECT
-    COURSE_ID,
-    TITLE,
-    C_NUMBER
+    CUR.COURSE_ID,
+    CUR.TITLE,
+    CUR.C_NUMBER
 FROM
-    COURSE
+    COURSE CUR
 ORDER BY
     TITLE;
 
 -- Course 테이블에서 과목코드(Course_Id),  과목명(Title), 학점수(C_Number),과목별 수강료(학점수 * 30000 + 추가수강료) 로 조회하되, 과목별 수강료를 내림차순, 과목코드는 오름차순으로 조회해 주세요 
 SELECT
-    COURSE_ID,
-    TITLE,
-    C_NUMBER,
-    ( ( C_NUMBER * 30000 ) + COURSE_FEES )
+    CUR.COURSE_ID AS "과목코드",
+    CUR.TITLE AS "과목명",
+    CUR.C_NUMBER AS "학점수",
+    ( ( C_NUMBER * 30000 ) + COURSE_FEES ) AS "과목별 수강료"
 FROM
-    COURSE
+    COURSE CUR
 ORDER BY
     ( ( C_NUMBER * 30000 ) + COURSE_FEES ) DESC,
     COURSE_ID ASC;
@@ -56,9 +56,9 @@ WHERE
 
 -- Course 테이블로부터 추가 수강료가 30000원 이상인 과목명을 조회하되, 추가 수강료를 내림차순으로 조회
 SELECT
-    TITLE
+    CUR.TITLE
 FROM
-    COURSE
+    COURSE CUR
 WHERE
     COURSE_FEES >= 30000
 ORDER BY
@@ -66,11 +66,11 @@ ORDER BY
 
 -- Student 테이블에서 '컴공' 학과 2학년 학생의 학과, 학년, 성명을 조회
 SELECT
-    DEPT_ID,
-    YEAR,
-    NAME
+    STD.DEPT_ID,
+    STD.YEAR,
+    STD.NAME
 FROM
-    STUDENT
+    STUDENT STD
 WHERE
         DEPT_ID = '컴공'
     AND YEAR = 2;
@@ -86,13 +86,7 @@ WHERE
 
 -- Professor 테이블에서 xxxx(Dept_ID)  학과 xxx(교수명) xxx(Position) 의 전화번호는 xxx(Telephone) 이다  정보로 출력
 SELECT
-    DEPT_ID
-    || '학과 '
-    || NAME
-    || POSITION
-    || ' 의 전화 번호는 '
-    || TELEPHONE
-    || ' 이다' AS PRINT
+    DEPT_ID || '학과 ' || NAME || POSITION || '의 전화 번호는 ' || TELEPHONE || ' 이다' AS PRINT
 FROM
     PROFESSOR;
 

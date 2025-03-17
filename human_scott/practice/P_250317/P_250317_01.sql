@@ -24,43 +24,43 @@ FROM
 
 -- 사원의 관리자, 월급, 커미션 조회
 SELECT
-    MGR,
-    SAL,
-    COMM
+    E.MGR,
+    E.SAL,
+    E.COMM
 FROM
-    EMP;
+    EMP E;
 
 -- 부서의 이름과 지역 조회
 SELECT
-    DNAME,
-    LOC
+    D.DNAME,
+    D.LOC
 FROM
-    DEPT;
+    DEPT D;
 
 -- 연봉등급과 최저 금액을 조회
 SELECT
-    GRADE,
-    LOSAL
+    SAL.GRADE,
+    SAL.LOSAL
 FROM
-    SALGRADE;
+    SALGRADE SAL;
 
 -- 회사에 존재하는 사원의 작업 조회
 SELECT
-    JOB
+    E.JOB
 FROM
-    EMP;
+    EMP E;
 
 -- 사원이 존재하는 부서 번호를 중복없이 조회
-SELECT DISTINCT
-    DEPTNO
+SELECT
+    DISTINCT E.DEPTNO
 FROM
-    EMP;
+    EMP E;
 
 -- 관리하는 사원이 존재하는 관리자 아이디를 중복없이 조회 
-SELECT DISTINCT
-    MGR
+SELECT
+    DISTINCT E.MGR
 FROM
-    EMP;
+    EMP E;
 
 -- 연봉 등급이 3일 때 받을 수 있는 최대, 최소 금액을 조회
 SELECT
@@ -372,21 +372,20 @@ ORDER BY
 
 -- 직급이 'SALESMAN' 이면 15%, 'MANAGER'이면 10%, 이외의 직종은 5% 급여를 인상하여 사원 정보를 조회
 SELECT
-    EMPNO,
-    ENAME,
-    JOB,
-    MGR,
-    HIREDATE,
-    SAL,
-    COMM,
-    DEPTNO,
-    CASE
-        WHEN JOB = 'SALESMAN' THEN
-            ( SAL * 0.15 ) + SAL
-        WHEN JOB = 'MANAGER'  THEN
-            ( SAL * 0.1 ) + SAL
-        ELSE
-            ( SAL * 0.05 ) + SAL
-    END AS "급여 인상"
+    E.EMPNO,
+    E.ENAME,
+    E.JOB,
+    E.MGR,
+    E.HIREDATE,
+    E.SAL,
+    E.COMM,
+    E.DEPTNO,
+    (
+        CASE
+            WHEN JOB = 'SALESMAN' THEN ( E.SAL * 0.15 ) + E.SAL
+            WHEN JOB = 'MANAGER'  THEN ( E.SAL * 0.1 ) + E.SAL
+            ELSE ( E.SAL * 0.05 ) + E.SAL
+        END
+    ) AS "급여 인상"
 FROM
-    EMP;
+    EMP E;

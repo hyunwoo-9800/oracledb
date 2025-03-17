@@ -1,5 +1,5 @@
 -- 새로운 개설 과목을 T_Course 테이블에 저장해 주세요,
---과목코드는 'L1061', 과목명 'ERP 실문', 3학점, 담당교수가 'P12' 이고 추가 수강료가 50000원 이다 
+-- 과목코드는 'L1061', 과목명 'ERP 실문', 3학점, 담당교수가 'P12' 이고 추가 수강료가 50000원 이다 
 SELECT
     *
 FROM
@@ -12,12 +12,12 @@ INSERT INTO T_COURSE VALUES ( 'L1061',
                               50000 );
 
 -- 새로운 개설 과목을 T_Course 테이블에 저장해 주세요.
---과목코드 'L1062',  과목명 '그룹웨어구축', 3학점, 담당교수가 'P13', 추가 수강료가 40000원 이다
+-- 과목코드 'L1062',  과목명 '그룹웨어구축', 3학점, 담당교수가 'P13', 추가 수강료가 40000원 이다
 INSERT INTO T_COURSE VALUES ( 'L1062', '그룹웨어구축', 3, 'P13', 40000 );
 
 -- SG_Scores 테이블에 저장해 주세요.
---학번이 'B1701', 과목코드가 'L1051', 성적이 85점, 성적취득날짜는 2018년 6월 28일
---날짜 기본 형식으로 'YY/MM/DD'
+-- 학번이 'B1701', 과목코드가 'L1051', 성적이 85점, 성적취득날짜는 2018년 6월 28일
+-- 날짜 기본 형식으로 'YY/MM/DD'
 SELECT
     *
 FROM
@@ -66,7 +66,7 @@ INSERT INTO PROFESSOR (PROFESSOR_ID, NAME, POSITION, TELEPHONE) VALUES
                       ( 'p14', '조성우', '조교수', '765-4114' );
 
 -- '컴공'학과 2학년에 '박은혜' 학생이 편입하였다.
---학번은 'C1731', 주민번호는 ' 011119-4** ',  이메일 주소는 'c1731@cyber.ac.kr' 를 Student 테이블에 저장
+-- 학번은 'C1731', 주민번호는 ' 011119-4** ',  이메일 주소는 'c1731@cyber.ac.kr' 를 Student 테이블에 저장
 SELECT
     *
 FROM
@@ -76,7 +76,7 @@ INSERT INTO STUDENT ( DEPT_ID, YEAR, STUDENT_ID, NAME, ID_NUMBER, EMAIL) VALUES
                     ( '컴공', 2, 'C1731', '박은혜', '011119-4**', 'c1731@cyber.ac.kr' );
 
 -- 컴퓨터공학과 시간강사를 위촉하였다.
---교수번호가 'P91', 교수명은 'Bob Miner', 직위는 '시간강사', 전화번호는 '765-4119' 정보를 Professor 테이블에 저장
+-- 교수번호가 'P91', 교수명은 'Bob Miner', 직위는 '시간강사', 전화번호는 '765-4119' 정보를 Professor 테이블에 저장
 SELECT
     *
 FROM
@@ -94,8 +94,8 @@ FROM
 INSERT INTO SG_SCORES VALUES ( 'C1731', 'L1021', 97, NULL, '2018/06/28' );
 
 -- Department 테이블의 학과명(dept_name) 을 '컴퓨터정보계열' 로 수정 한후
---Department 테이블을 전체 조회해서 결과를 카피해서 주석에 붙여넣기 하고
---rollback 해서 원 데이터로 돌려놓기
+-- Department 테이블을 전체 조회해서 결과를 카피해서 주석에 붙여넣기 하고
+-- rollback 해서 원 데이터로 돌려놓기
 
 --대학	컴퓨터정보계열	765-4000
 --컴공	컴퓨터정보계열	765-4100
@@ -195,6 +195,8 @@ SELECT
 FROM
     EC_PRODUCT;
 
+
+-- EC_PRODUCT에 값 넣기
 INSERT INTO EC_PRODUCT VALUES ( 'SP01',
                                 '아이폰',
                                 'IPHONE8+64G',
@@ -228,6 +230,7 @@ INSERT INTO EC_PRODUCT VALUES ( 'SP03',
                                 NULL,
                                 NULL );
 
+-- 들어간 값 확인
 SELECT
     *
 FROM
@@ -235,6 +238,8 @@ FROM
 WHERE
     MDATE = '2018/05/10';
 
+
+-- EC_ORDER에 값 넣기
 INSERT INTO EC_ORDER VALUES ( '180505002',
                               'kcchoi',
                               'DK01',
@@ -285,15 +290,16 @@ INSERT INTO EC_ORDER VALUES ( '180707003',
                               '2018/07/12',
                               '결제' );
 
+-- 주문처리(EC_Order) 테이블로 부터 2018년 7월 12일 결제한 주문번호, 상품코드, 주문수량, 결제금액, 결제방법, 결제일자를 주문번호순으로 조회
 SELECT
-    ORDER_NO,
-    PRODUCT_CODE,
-    ORDER_QTY,
-    CMONEY,
-    CSEL,
-    MDATE
+    ORD.ORDER_NO,
+    ORD.PRODUCT_CODE,
+    ORD.ORDER_QTY,
+    ORD.CMONEY,
+    ORD.CSEL,
+    ORD.MDATE
 FROM
-    EC_ORDER
+    EC_ORDER ORD
 ORDER BY
     ORDER_NO;
 
@@ -302,6 +308,7 @@ SELECT
 FROM
     EC_MEMBER;
 
+-- 회원관리(EC_Member) 테이블의 구매실적(BuyCash) 컬럼이 null 인 행으로 0 으로 수정
 UPDATE EC_MEMBER
 SET
     BUYCASH = 0
