@@ -369,6 +369,15 @@ FROM
 ORDER BY
     B.DNAME,
     A.EMPNO;
+    
+-- 사원 정보를 부서는 오름차순으로 정렬하고 같은 부서 사원은 사원번호로 오름차순으로 정렬
+SELECT
+    *
+FROM
+    EMP
+ORDER BY
+    DEPTNO,
+    EMPNO;
 
 -- 직급이 'SALESMAN' 이면 15%, 'MANAGER'이면 10%, 이외의 직종은 5% 급여를 인상하여 사원 정보를 조회
 SELECT
