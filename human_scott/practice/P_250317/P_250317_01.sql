@@ -389,6 +389,7 @@ SELECT
     E.SAL,
     E.COMM,
     E.DEPTNO,
+--    E.*,
     (
         CASE
             WHEN JOB = 'SALESMAN' THEN ( E.SAL * 0.15 ) + E.SAL
