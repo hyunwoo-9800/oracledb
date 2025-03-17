@@ -240,7 +240,7 @@ SELECT
 FROM
     EMP
 WHERE
-    ENAME BETWEEN 'E' AND 'H';
+    ENAME BETWEEN 'E%' AND 'G%';
 
 -- 사원의 입사일이 2004년 5월 20일 ~ 2007년 10월 10일까지의 사원 정보를 조회
 SELECT
