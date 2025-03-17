@@ -86,7 +86,7 @@ ALTER TABLE BOARD MODIFY (
     B_PWD NULL
 );
 
--- Board 테이블의 IP주소(B_Ip) 컬럼을 삭제해 주세요
+-- Board 테이블의 동일 게시물번호(B_Step) 컬럼명을 B_Level 로 변경해 주세요 
 ALTER TABLE BOARD RENAME COLUMN B_STEP TO B_LEVEL;
 
 -- Board 테이블의 IP주소(B_Ip) 컬럼을 삭제해 주세요
