@@ -1,58 +1,58 @@
 -- where 연습
 
---SELECT
---    EMP.EMPLOYEE_ID,
---    EMP.FIRST_NAME,
---    EMP.LAST_NAME,
---    EMP.SALARY
---FROM
---    EMPLOYEES EMP
---WHERE
---    10000 <= SALARY;
---    
---SELECT
---    *
---FROM
---    EMPLOYEES
---WHERE
---    Department_Id = 50;
+SELECT
+    EMP.EMPLOYEE_ID,
+    EMP.FIRST_NAME,
+    EMP.LAST_NAME,
+    EMP.SALARY
+FROM
+    EMPLOYEES EMP
+WHERE
+    10000 <= SALARY;
     
---SELECT
---    *
---FROM
---    JOBS
---WHERE
---    JOB_ID = 'AC_MGR';
---    
---SELECT
---    *
---FROM
---    JOBS
---WHERE
---    JOB_ID <> 'FI_ACCOUNT';
---    
---SELECT
---    EMP.EMPLOYEE_ID,
---    EMP.HIRE_DATE,
---    EMP.PHONE_NUMBER
---FROM
---    EMPLOYEES EMP
---WHERE EMP.HIRE_DATE >= '2003/09/17'
---ORDER BY EMP.HIRE_DATE
+SELECT
+    *
+FROM
+    EMPLOYEES
+WHERE
+    Department_Id = 50;
+    
+SELECT
+    *
+FROM
+    JOBS
+WHERE
+    JOB_ID = 'AC_MGR';
+    
+SELECT
+    *
+FROM
+    JOBS
+WHERE
+    JOB_ID <> 'FI_ACCOUNT';
+    
+SELECT
+    EMP.EMPLOYEE_ID,
+    EMP.HIRE_DATE,
+    EMP.PHONE_NUMBER
+FROM
+    EMPLOYEES EMP
+WHERE EMP.HIRE_DATE >= '2003/09/17'
+ORDER BY EMP.HIRE_DATE
 
---SELECT
---    *
---FROM
---    EMPLOYEES
---WHERE
---    MANAGER_ID IS NULL;
---    
---SELECT
---    *
---FROM
---    EMPLOYEES
---WHERE
---    MANAGER_ID IS NOT NULL;
+SELECT
+    *
+FROM
+    EMPLOYEES
+WHERE
+    MANAGER_ID IS NULL;
+    
+SELECT
+    *
+FROM
+    EMPLOYEES
+WHERE
+    MANAGER_ID IS NOT NULL;
 
 SELECT
     *

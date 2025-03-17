@@ -260,6 +260,7 @@ INSERT INTO EC_ORDER VALUES ( '180505003',
                               '2018/05/10',
                               '배달' );
 
+-- EC_ORDER.CSEL 열에 대한 값이 너무 큼(실제: 12, 최대값: 10)
 INSERT INTO EC_ORDER VALUES ( '180707001',
                               'jupark',
                               ' ',
@@ -270,6 +271,7 @@ INSERT INTO EC_ORDER VALUES ( '180707001',
                               '2018/07/12',
                               '결제' );
 
+-- EC_ORDER.CSEL 열에 대한 값이 너무 큼(실제: 12, 최대값: 10)
 INSERT INTO EC_ORDER VALUES ( '180707002',
                               'jupark',
                               ' ',
@@ -280,6 +282,7 @@ INSERT INTO EC_ORDER VALUES ( '180707002',
                               '2018/07/12',
                               '결제' );
 
+-- EC_ORDER.CSEL 열에 대한 값이 너무 큼(실제: 12, 최대값: 10)
 INSERT INTO EC_ORDER VALUES ( '180707003',
                               'cscho',
                               ' ',

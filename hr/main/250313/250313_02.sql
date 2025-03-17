@@ -1,17 +1,17 @@
 -- 중복 제거
 SELECT DISTINCT
-    employee_id
+    EMPLOYEE_ID
 FROM
-    job_history;
+    JOB_HISTORY;
 
 SELECT DISTINCT
-    emp.job_id as "직업 번호",
-    emp.salary as "연봉"
+    EMP.JOB_ID AS "직업 번호",
+    EMP.SALARY AS "연봉"
 FROM
-    employees emp
+    EMPLOYEES EMP
 ORDER BY
-    salary,
-    job_id;
+    SALARY,
+    JOB_ID;
 
 -- 매니저 아이디 중복 제거
 SELECT DISTINCT

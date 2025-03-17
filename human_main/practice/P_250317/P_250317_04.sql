@@ -98,7 +98,9 @@ AS
    SELECT *
    FROM  COURSE
    WHERE  10=20;
-   
+
+ALTER TABLE T_COURSE modify(TITLE  VARCHAR2(40));
+  
 /**
 T_SG_Scores 테이블 생성
 **/
