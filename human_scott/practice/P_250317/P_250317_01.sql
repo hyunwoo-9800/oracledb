@@ -256,7 +256,7 @@ SELECT
 FROM
     EMP
 WHERE
-    HIREDATE >= '1983/12/31'
+    HIREDATE >= '1983/01/01'
     OR JOB = 'SALESMAN';
 
 -- 20번 부서가 아닌 모든 사원 정보를 조회
