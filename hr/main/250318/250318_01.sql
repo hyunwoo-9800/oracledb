@@ -4,6 +4,7 @@ SELECT
     ABS(-10)
 FROM
     DUAL;
+
     
 -- floor 소수점 아래 버림
 SELECT
@@ -11,7 +12,8 @@ SELECT
     FLOOR(11.123)
 FROM
     DUAL;
-    
+
+
 -- round 반올림, 소수점 반올림
 SELECT
     11.123,
@@ -32,6 +34,7 @@ SELECT
     ROUND(11.456, 3)
 FROM
     DUAL;
+
     
 -- trunc 소수점 버리기
 SELECT
@@ -64,6 +67,7 @@ SELECT
     TRUNC(123.129, -3)
 FROM
     DUAL;
+
     
 -- mod 나머지
 SELECT
@@ -72,6 +76,7 @@ SELECT
     MOD(10, 3)
 FROM
     DUAL;
+
     
 -- lower 소문자 / upper 대문자 / initcap 시작부분만 대문자
 SELECT
@@ -88,6 +93,7 @@ SELECT
     CONCAT('he', 'llo')
 FROM
     DUAL;
+
     
 -- substr 문자열 자르기
 SELECT
@@ -102,6 +108,7 @@ SELECT
 FROM
     DUAL;
 
+
 -- ltrim 왼쪽 공백 삭제, rtrim 오른쪽 공백 삭제, trim 양쪽 공백 삭제
 SELECT
     LTRIM('     hello     ') AS T1,
@@ -109,6 +116,7 @@ SELECT
     TRIM('     hello     ') AS T3
 FROM
     DUAL;
+
 
 -- instr 특정 문자열의 위치를 찾음
 -- instr(검색할 문자열, 찾고 싶은 문자열, 검색시작 위치, 몇 번째 인덱스를 가져올지)
@@ -137,6 +145,7 @@ SELECT
     ADD_MONTHS(SYSDATE, -2)
 FROM  
     DUAL;
+  
     
 -- next_day 다음 요일의 날짜를 구함(요일에 해당하는 날짜)
 -- 1일요일 2월요일 ''' 7토요일 순
@@ -147,6 +156,7 @@ SELECT
     NEXT_DAY(SYSDATE, 4) AS "가장 가까운 수요일"
 FROM  
     DUAL;   
+    
     
 -- last_day 달의 마지막 일을 구함
 SELECT
@@ -197,7 +207,8 @@ SELECT
 FROM
     DUAL;
     
--- salary에서 10000빼고 음수을 때는 양수로
+    
+-- salary에서 10000빼고 음수일 때는 양수로
 SELECT
     SALARY - 10000      AS "원래 값",
     ABS(SALARY - 10000) AS "절대 값"
@@ -205,6 +216,149 @@ FROM
     EMPLOYEES;
 
 
+-- 시간 날짜
+SELECT
+    sysdate AS "현재 날짜",
+    sysdate + 1 AS "내일 날짜",
+    sysdate - 1 AS "어제 날짜"
+FROM
+    DUAL;
+
+SELECT
+    sysdate - 1 / 24 AS "한 시간전",
+    sysdate + 1 / 24 AS "한 시간후"
+FROM
+    DUAL;
+    
+SELECT
+    ADD_MONTHS(sysdate, 1) AS "한달 후",
+    ADD_MONTHS(sysdate, -1) AS "한달 전",
+    ADD_MONTHS(sysdate, 12) AS "1년 후",
+    ADD_MONTHS(sysdate, -12) AS "1년 전"
+FROM
+    DUAL;
+
+
+-- 현재 시간의 요일
+SELECT
+    TO_CHAR(sysdate, 'DAY') AS "요일"
+FROM
+    DUAL;
+
+
+-- 그룹 함수
+
+-- 합계
+SELECT
+    SUM(SALARY) AS "총 급여"
+FROM
+    EMPLOYEES;
+
+
+-- 평균
+SELECT
+    AVG(SALARY) AS "급여평균"
+FROM
+    EMPLOYEES;
+
+
+-- 카운트
+SELECT
+    COUNT(SALARY) AS "전체 사원수"
+FROM
+    EMPLOYEES;
+    
+    
+SELECT
+    SUM(SALARY) AS "총 급여",
+    COUNT(SALARY) AS "전체 사원수",
+    SUM(SALARY) / COUNT(SALARY) AS "평균 테스트",
+    AVG(SALARY) AS "급여평균"
+FROM
+    EMPLOYEES;
+    
+
+-- 최댓값
+SELECT
+    MAX(SALARY) AS "최고 급여 금액"
+FROM
+    EMPLOYEES
+
+UNION ALL
+
+-- 최솟값
+SELECT
+    MIN(SALARY) AS "최고 급여 금액"
+FROM
+    EMPLOYEES;
+
+
+SELECT
+    COUNT(*) AS CNT,
+    COUNT(NVL(COMMISSION_PCT, 0)) AS CNT2
+FROM
+    EMPLOYEES;
+    
+SELECT
+    AVG(COMMISSION_PCT) AS "합계",
+    AVG(NVL(COMMISSION_PCT, 0)) AS "합계2"
+FROM
+    EMPLOYEES;
+
+
+-- group by
+SELECT
+    DEPARTMENT_ID,
+    AVG(SALARY) AS "급여 평균",
+    COUNT(SALARY) AS  "사원수"
+FROM
+    EMPLOYEES
+WHERE
+    DEPARTMENT_ID IN (60, 90, 100)
+GROUP BY
+    DEPARTMENT_ID
+ORDER BY
+    DEPARTMENT_ID;
+    
+SELECT
+    DEPARTMENT_ID,
+    AVG(SALARY) AS "급여 평균",
+    COUNT(SALARY) AS  "사원수"
+FROM
+    EMPLOYEES
+GROUP BY
+    DEPARTMENT_ID
+ORDER BY
+    DEPARTMENT_ID;    
+   
+
+-- 부서번호가 100보다 작은 데이터를 부서번호로 그룹지어 사원의 급여 평균 조회
+SELECT
+    DEPARTMENT_ID AS "부서 번호",
+    AVG(SALARY)   AS "급여 평균"
+FROM
+    EMPLOYEES
+WHERE
+    DEPARTMENT_ID < 100
+GROUP BY
+    DEPARTMENT_ID
+ORDER BY
+    DEPARTMENT_ID;
+
+ 
+-- having group by로 그룹 지어진 컬럼의 대표값 비교 
+SELECT
+    DEPARTMENT_ID AS "부서 번호",
+    AVG(SALARY)   AS "급여 평균"
+FROM
+    EMPLOYEES
+WHERE
+    DEPARTMENT_ID < 100
+GROUP BY
+    DEPARTMENT_ID
+HAVING AVG(SALARY) >= 8000
+ORDER BY 
+    DEPARTMENT_ID;
 
 
 
@@ -232,4 +386,8 @@ FROM
 
 
 
+
+ 
+ 
+ 
     
