@@ -56,11 +56,14 @@ SELECT
 FROM
     EMP E;
 
--- 관리하는 사원이 존재하는 관리자 아이디를 중복없이 조회 
+-- 관리하는 사원이 존재하는 관리자 아이디를 중복없이 조회
+-- where절 안적음
 SELECT
     DISTINCT E.MGR
 FROM
-    EMP E;
+    EMP E
+WHERE
+	MGR IS NOT NULL;
 
 -- 연봉 등급이 3일 때 받을 수 있는 최대, 최소 금액을 조회
 SELECT
@@ -122,8 +125,10 @@ FROM
     EMP;
 
 -- 사원의 급여와 커미션을 합한 형태로 컬럼명을 upgradeSalary 로 조회
+-- SAL, (SAL + NVL(COMM,0)) 안적음
 SELECT
-    SAL || COMM AS UPGRADESALARY
+	 SAL,
+    (SAL + NVL(COMM,0)) AS UPGRADESALARY
 FROM
     EMP;
 
@@ -132,6 +137,29 @@ SELECT
     EMPNO || ' 사번의 사원은 관리자가 ' || MGR || ' 사번 입니다.' AS PRINT
 FROM
     EMP;
+	
+-- 관리자가 없는 사원이 사장이다. 사장의 관리자 번호를 9999 로 출력이 되도록 nvl, nvl2, decode 함수를 이용해서 각각 쿼리문을 만들어 주세요
+-- 누락
+SELECT
+	NVL(MGR, 9999)
+FROM
+	EMP;
+	
+SELECT
+	NVL2(MGR, MGR, 9999)
+FROM
+	EMP;
+	
+SELECT
+	DECODE(MGR, null, 9999, MGR)
+FROM
+	EMP;
+
+
+-- 추가로 지급되는 커미션이 없으면 0 으로 조회가 되도록 조회
+-- 누락
+SELECT NVL(COMM, 0) FROM EMP;
+	
 
 -- 급여가 800보다 같거나 많고 1000보다 같거나 작은 사원 정보를 조회
 SELECT
@@ -185,22 +213,24 @@ WHERE
         SAL >= 800
     AND SAL <= 1000;
 
--- 급여가 700보다 작거나 1000보다 큰 사원 정보를 조회 
+-- 급여가 700보다 작거나 1000보다 큰 사원 정보를 조회
+-- 같은 값 포함
 SELECT
     *
 FROM
     EMP
 WHERE
-    SAL <= 700
-    OR SAL >= 1000;
+    SAL < 700
+    OR SAL > 1000;
 
 -- 사원의 이름이 SCOTT 인 사원 정보를 조회
+-- LIKE 필요없음
 SELECT
     *
 FROM
     EMP
 WHERE
-    ENAME LIKE '%SCOTT%';
+    ENAME = 'SCOTT';
 
 -- 사원 이름이 'A' 로 시작하는 사원 정보를 조회
 SELECT
