@@ -51,7 +51,7 @@ SELECT
 FROM
     EMPLOYEES   EMP
     LEFT JOIN DEPARTMENTS DEP
-    ON EMP.DEPARTMENT_ID = DEP.DEPARTMENT_ID
+		ON EMP.DEPARTMENT_ID = DEP.DEPARTMENT_ID
 WHERE
     EMP.DEPARTMENT_ID = '100';
 
@@ -64,7 +64,7 @@ SELECT
 FROM
     EMPLOYEES   EMP
     LEFT JOIN DEPARTMENTS DEP
-    ON EMP.DEPARTMENT_ID = DEP.DEPARTMENT_ID
+		ON EMP.DEPARTMENT_ID = DEP.DEPARTMENT_ID
 WHERE
     EMP.SALARY <= 10000
 ORDER BY
@@ -80,7 +80,7 @@ SELECT
 FROM 
     COUNTRIES CUN
     LEFT JOIN REGIONS RG
-    ON CUN.REGION_ID = RG.REGION_ID;
+		ON CUN.REGION_ID = RG.REGION_ID;
 
 
 -- 사원의 사번, 급여, 직종, 이름, 해당 직종의 최소 급여, 최대 급여
@@ -94,7 +94,7 @@ SELECT
 FROM
     EMPLOYEES   EMP
     LEFT JOIN JOBS JB
-    ON EMP.JOB_ID = JB.JOB_ID
+		ON EMP.JOB_ID = JB.JOB_ID
 ORDER BY
     EMP.JOB_ID;
 
@@ -109,7 +109,7 @@ SELECT
 FROM 
     EMPLOYEES EMP
     LEFT JOIN EMPLOYEES EMP2
-    ON EMP2.MANAGER_ID = EMP.MANAGER_ID
+		ON EMP2.MANAGER_ID = EMP.MANAGER_ID
 ORDER BY
     EMP.EMPLOYEE_ID;
     
@@ -121,7 +121,7 @@ SELECT
 FROM
     EMPLOYEES   EMP
     LEFT JOIN DEPARTMENTS DEP
-    ON EMP.DEPARTMENT_ID = DEP.DEPARTMENT_ID
+		ON EMP.DEPARTMENT_ID = DEP.DEPARTMENT_ID
 ORDER BY
     EMPLOYEE_ID;    
     
@@ -132,15 +132,14 @@ SELECT
 FROM
     LOCATIONS
 WHERE
-    COUNTRY_ID IN
-    (
-        SELECT
-            COUNTRY_ID
-        FROM
-            COUNTRIES
-        WHERE
-            REGION_ID = 2
-    );
+    COUNTRY_ID IN (
+					SELECT
+						COUNTRY_ID
+					FROM
+						COUNTRIES
+					WHERE
+						REGION_ID = 2
+				   );
     
     
 SELECT
@@ -166,8 +165,7 @@ SELECT
 FROM
     DEPARTMENTS
 WHERE
-    LOCATION_ID IN
-    (
+    LOCATION_ID IN (
         SELECT
             LOCATION_ID
         FROM
@@ -185,11 +183,7 @@ WHERE
                         FROM
                             REGIONS
                         WHERE
-                           REGION_NAME = 'Asia'
-
-                    )
-            )
-    );
+                           REGION_NAME = 'Asia')));
 
 SELECT
     *
@@ -220,15 +214,14 @@ SELECT
 FROM
     EMPLOYEES EMP
 WHERE
-    EMP.DEPARTMENT_ID IN
-    (
-        SELECT
-            DEPARTMENT_ID
-        FROM
-            DEPARTMENTS
-        WHERE
-            LOCATION_ID = '1700'
-    )
+    EMP.DEPARTMENT_ID IN (
+							SELECT
+								DEPARTMENT_ID
+							FROM
+								DEPARTMENTS
+							WHERE
+								LOCATION_ID = '1700'
+						 )
 ORDER BY
     EMPLOYEE_ID;
 
@@ -258,13 +251,12 @@ SELECT
 FROM
     EMPLOYEES EMP
 WHERE
-    SALARY IN
-    (
-        SELECT
-            MAX(SALARY)
-        FROM
-            EMPLOYEES
-    )
+    SALARY IN (
+				SELECT
+					MAX(SALARY)
+				FROM
+					EMPLOYEES
+			  )
 ORDER BY
     EMP.EMPLOYEE_ID;
 
@@ -285,12 +277,12 @@ FROM
     EMPLOYEES EMP
 WHERE
     EMP.SALARY >
-    (
-        SELECT
-            AVG(SALARY)
-        FROM
-            EMPLOYEES
-    )
+				(
+					SELECT
+						AVG(SALARY)
+					FROM
+						EMPLOYEES
+				)
 ORDER BY
     SALARY;
     
