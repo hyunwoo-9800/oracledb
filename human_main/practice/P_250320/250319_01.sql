@@ -1,0 +1,258 @@
+-- 삼성회사의 제품을 상품명순으로
+SELECT
+    PRODUCT_CODE,
+    PRODUCT_NAME,
+    UNIT,
+    UNIT_PRICE,
+    LEFT_QTY,
+    COMPANY
+FROM
+    EC_PRODUCT
+WHERE
+    COMPANY = 'SAMSUNG'
+ORDER BY
+    PRODUCT_NAME;
+
+-- 제품 단가 50만원 초과 단가 내림차순으로
+SELECT
+    PRODUCT_CODE,
+    PRODUCT_NAME,
+    UNIT,
+    UNIT_PRICE,
+    LEFT_QTY,
+    COMPANY
+FROM
+    EC_PRODUCT
+WHERE
+    UNIT_PRICE > 500000
+ORDER BY
+    UNIT_PRICE DESC;
+
+-- 정씨 회원정보 출력
+SELECT
+    NAME,
+    REGIST_NO,
+    TELEPHONE,
+    TIMESTAMP
+FROM
+    EC_MEMBER
+WHERE
+    NAME LIKE '정%';
+
+-- 현금, 계좌이체 정보 출려
+SELECT
+    ORDER_NO,
+    PRODUCT_CODE,
+    CSEL,
+    CDATE
+FROM
+    EC_ORDER
+WHERE
+    CSEL IN ( '신용카드', '현금입금' )
+ORDER BY
+    CSEL,
+    CDATE;
+
+-- HP 회사의 프린터 제품 단가순 출력
+SELECT
+    PRODUCT_CODE,
+    PRODUCT_NAME,
+    UNIT,
+    UNIT_PRICE,
+    LEFT_QTY
+FROM
+    EC_PRODUCT
+WHERE
+        PRODUCT_NAME = '프린터'
+    AND COMPANY = 'HP'
+ORDER BY
+    UNIT_PRICE;
+ 
+ 
+-- 삼성과 LG가 아닌 제품 단가순 출력
+SELECT
+    PRODUCT_CODE,
+    PRODUCT_NAME,
+    UNIT,
+    UNIT_PRICE,
+    LEFT_QTY,
+    COMPANY
+FROM
+    EC_PRODUCT
+WHERE
+    COMPANY NOT IN ( 'SAMSUNG', 'LG전자' )
+ORDER BY
+    COMPANY,
+    UNIT_PRICE;    
+
+-- 주소가 서울과 대구가 아닌 사람 주소순 출력
+SELECT
+    NAME,
+    REGIST_NO,
+    TELEPHONE,
+    ADDRESS
+FROM
+    EC_MEMBER
+WHERE
+    ADDRESS NOT LIKE '서울%'
+    AND ADDRESS NOT LIKE '대구%'
+ORDER BY
+    ADDRESS;
+
+-- 재고수량 10미만 단가순 출력
+SELECT
+    PRODUCT_CODE,
+    PRODUCT_NAME,
+    STANDARD,
+    UNIT_PRICE,
+    LEFT_QTY,
+    COMPANY
+FROM
+    EC_PRODUCT
+WHERE
+    LEFT_QTY < 10
+ORDER BY
+    PRODUCT_NAME; 
+
+-- 전화번호 666이 포함 / 회원명 순 출력
+SELECT
+    NAME,
+    REGIST_NO,
+    TELEPHONE,
+    ADDRESS
+FROM
+    EC_MEMBER
+WHERE
+    TELEPHONE LIKE '%666%'
+ORDER BY
+    NAME;
+
+-- 2018/05/01 이후에 가입한 회원 / 가입일자 순 출력
+SELECT
+    NAME,
+    REGIST_NO,
+    TELEPHONE,
+    ADDRESS,
+    TIMESTAMP
+FROM
+    EC_MEMBER
+WHERE
+    TIMESTAMP > '2018/05/01'
+ORDER BY
+    TIMESTAMP;
+
+-- 노트로 시작하는 상품 / 생산처 순 출력
+SELECT
+    PRODUCT_CODE,
+    PRODUCT_NAME,
+    UNIT,
+    UNIT_PRICE,
+    LEFT_QTY,
+    COMPANY
+FROM
+    EC_PRODUCT
+WHERE
+    PRODUCT_NAME LIKE '노트%'
+ORDER BY
+    COMPANY; 
+
+-- LG상품 중 80만원 초과 / 상품코드 순 출력
+SELECT
+    PRODUCT_CODE,
+    PRODUCT_NAME,
+    UNIT,
+    UNIT_PRICE,
+    LEFT_QTY,
+    COMPANY
+FROM
+    EC_PRODUCT
+WHERE
+    COMPANY LIKE 'LG%'
+    AND UNIT_PRICE > 800000
+ORDER BY
+    PRODUCT_CODE;
+
+-- 생산처가 없는 제품 / 상품코드 순 출력
+SELECT
+    PRODUCT_CODE,
+    PRODUCT_NAME,
+    UNIT,
+    UNIT_PRICE,
+    LEFT_QTY,
+    COMPANY
+FROM
+    EC_PRODUCT
+WHERE
+    COMPANY IS NULL
+ORDER BY
+    PRODUCT_CODE; 
+
+-- CM01 1개 초과 주문 / 주문자 ID 순 출력
+SELECT
+    ORDER_NO,
+    ORDER_ID,
+    PRODUCT_CODE,
+    ORDER_QTY,
+    CMONEY
+FROM
+    EC_ORDER
+WHERE
+        PRODUCT_CODE = 'CM01'
+    AND ORDER_QTY > 1
+ORDER BY
+    ORDER_ID;
+
+-- 고씨 부터 최씨 제외 / 회원명 순 출력
+SELECT
+    NAME,
+    REGIST_NO,
+    TELEPHONE,
+    ADDRESS
+FROM
+    EC_MEMBER
+WHERE
+    NAME NOT BETWEEN '고' AND '쵸'
+ORDER BY
+    NAME;
+
+-- L1011 L1021 학점 취득한 학생 / 과목코드 학번순 출력
+SELECT
+    COURSE_ID,
+    STUDENT_ID,
+    SCORE,
+    SCORE_ASSIGNED
+FROM
+    SG_SCORES
+WHERE
+    COURSE_ID IN ( 'L1011', 'L1021' )
+    AND SCORE IS NOT NULL
+    AND SCORE > 0
+ORDER BY
+    COURSE_ID,
+    STUDENT_ID;
+
+-- 성적이 80점 이상이 아닌 행
+SELECT
+    COURSE_ID,
+    STUDENT_ID,
+    SCORE,
+    SCORE_ASSIGNED
+FROM
+    SG_SCORES
+WHERE
+    SCORE <= 80;
+
+-- 컴공, 경영이 아닌 학생 / 학과 코드, 학번순 출력
+SELECT
+    DEPT_ID,
+    YEAR,
+    STUDENT_ID,
+    NAME,
+    TELEPHONE
+FROM
+    STUDENT
+WHERE
+    DEPT_ID NOT IN ( '컴공', '경영' )
+ORDER BY
+    DEPT_ID,
+    STUDENT_ID;
