@@ -215,7 +215,7 @@ FROM
 
 -- 현재 날짜와 시간을 'YYYY-MM-DD HH24:MI:SS FF3' 형식으로 변환하여 조회
 SELECT
-    TO_TIMESTAMP(SYSDATE, 'YYYY-mm-DD hh24:mi:ss.ff3')
+    TO_TIMESTAMP(SYSDATE, 'YYYY-mm-DD HH24:MI:SS.FF3')
 FROM
     DUAL;
 
@@ -559,12 +559,13 @@ WHERE
 
 -- 널 값 0으로
 SELECT
-COURSE_ID,
-TITLE,
-C_NUMBER,
-PROFESSOR_ID,
-COALESCE(COURSE_FEES, 0)
-FROM T_COURSE;
+    COURSE_ID,
+    TITLE,
+    C_NUMBER,
+    PROFESSOR_ID,
+    COALESCE(COURSE_FEES, 0)
+FROM
+    T_COURSE;
 
 
 -- 5일 더하고 4시간 더하기
@@ -581,9 +582,9 @@ FROM
     EC_PRODUCT
 ORDER BY
     DECODE(PRODUCT_NAME, '개인용컴퓨터', 1,
-                     '노트북컴퓨터', 2,
-                     '프린터', 3,
-                     'TV', 4),
+                         '노트북컴퓨터', 2,
+                         '프린터', 3,
+                         'TV', 4),
     UNIT_PRICE DESC;
 
 
@@ -752,3 +753,488 @@ WHERE
     
 
 -- 취득한 과목
+SELECT
+    B.YEAR,
+    B.NAME,
+    C.COURSE_ID,
+    C.TITLE,
+    C.C_NUMBER,
+    A.SCORE,
+    A.GRADE
+FROM
+    SG_SCORES A
+    LEFT JOIN STUDENT   B ON A.STUDENT_ID = B.STUDENT_ID
+    LEFT JOIN COURSE    C ON A.COURSE_ID = C.COURSE_ID
+WHERE
+    A.STUDENT_ID = 'C1701';
+
+
+-- 교수가 개설한 과목
+SELECT
+    A.PROFESSOR_ID,
+    A.NAME,
+    A.POSITION,
+    B.TITLE,
+    B.C_NUMBER
+FROM
+    PROFESSOR A
+    LEFT JOIN COURSE B
+        ON A.PROFESSOR_ID = B.PROFESSOR_ID
+WHERE
+    A.PROFESSOR_ID IN (
+        SELECT
+            B.PROFESSOR_ID
+        FROM
+            COURSE B
+    )
+ORDER BY
+    PROFESSOR_ID;
+
+
+-- 과목을 개설하지 않은 교수
+SELECT
+    A.PROFESSOR_ID,
+    A.NAME,
+    A.POSITION,
+    B.TITLE,
+    B.C_NUMBER
+FROM
+    PROFESSOR A
+    LEFT JOIN COURSE B
+        ON A.PROFESSOR_ID = B.PROFESSOR_ID
+WHERE
+    B.TITLE IS NULL
+ORDER BY
+    PROFESSOR_ID;
+
+
+-- 교수의 관리자명
+SELECT
+    A.NAME     AS "교수명",
+    A.POSITION AS "직위",
+    B.NAME     AS "관리자명",
+    B.POSITION AS "관리자 직위"
+FROM
+    PROFESSOR A
+    LEFT JOIN PROFESSOR B ON A.MGR = B.PROFESSOR_ID
+ORDER BY
+    A.MGR;
+    
+    
+-- 추가 수강료 5만원 담당 교수
+SELECT
+    A.DEPT_ID,
+    A.NAME,
+    A.POSITION
+FROM
+    PROFESSOR A
+    LEFT JOIN COURSE    B ON A.PROFESSOR_ID = B.PROFESSOR_ID
+WHERE
+    B.COURSE_FEES = 50000;
+    
+    
+-- 담당교수가 없는 과목
+SELECT
+    A.COURSE_ID,
+    A.TITLE,
+    A.C_NUMBER,
+    A.PROFESSOR_ID,
+    A.COURSE_FEES
+FROM
+    COURSE A
+    LEFT JOIN PROFESSOR B
+        ON A.PROFESSOR_ID = B.PROFESSOR_ID
+WHERE
+    A.PROFESSOR_ID IS NULL;
+
+
+-- 한번 이상 거래한 회원
+SELECT
+    A.NAME,
+    A.REGIST_NO,
+    C.PRODUCT_NAME,
+    B.ORDER_QTY,
+    B.CMONEY
+FROM
+    EC_MEMBER A
+    LEFT JOIN EC_ORDER B
+        ON A.USERID = B.ORDER_ID
+    LEFT JOIN EC_PRODUCT C
+        ON B.PRODUCT_CODE = C.PRODUCT_CODE
+WHERE
+    B.ORDER_QTY >= 1;
+
+
+-- 한번도 주문하지 않은 회원
+SELECT
+    A.NAME,
+    A.REGIST_NO,
+    A.TELEPHONE
+FROM
+    EC_MEMBER A
+    LEFT JOIN EC_ORDER B
+        ON A.USERID = B.ORDER_ID
+WHERE
+    B.ORDER_QTY IS NULL OR B.ORDER_QTY = 0;
+
+
+-- 한번 이상 거래한 회원중 서울에 사는 사람
+SELECT
+    A.NAME,
+    A.REGIST_NO,
+    C.PRODUCT_NAME,
+    B.ORDER_QTY,
+    C.UNIT_PRICE,
+    A.ADDRESS
+FROM
+    EC_MEMBER A
+    JOIN EC_ORDER B
+        ON A.USERID = B.ORDER_ID
+    JOIN EC_PRODUCT C
+        ON B.PRODUCT_CODE = C.PRODUCT_CODE
+WHERE
+    B.ORDER_QTY >= 1
+    AND A.ADDRESS LIKE '%서울%';
+
+
+-- C1801의 수강신청 과목
+SELECT
+    A.TITLE
+FROM
+    T_COURSE A
+        JOIN T_SG_SCORES B
+            ON A.COURSE_ID = B.COURSE_ID
+        JOIN STUDENT C
+            ON B.STUDENT_ID = C.STUDENT_ID
+WHERE
+    C.STUDENT_ID = 'C1801';
+    
+    
+-- C1801의 성적
+SELECT
+    B.SCORE
+FROM
+    T_COURSE A
+        JOIN T_SG_SCORES B
+            ON A.COURSE_ID = B.COURSE_ID
+        JOIN STUDENT C
+            ON B.STUDENT_ID = C.STUDENT_ID
+WHERE
+    C.STUDENT_ID = 'C1801'; 
+    
+
+-- 평점
+SELECT 
+    A.Student_ID,
+    A.Course_ID,
+    C.Title,
+    C.C_Number AS "학점",
+    A.Grade,
+    CASE
+        A.Grade WHEN 'A+' THEN 4.5
+              WHEN 'A' THEN 4.0
+              WHEN 'B+' THEN 3.5
+              WHEN 'B' THEN 3.0
+              WHEN 'C+' THEN 2.5
+              WHEN 'C' THEN 2.0
+              WHEN 'D+' THEN 1.5
+              WHEN 'D' THEN 1.0
+              ELSE 0.0  END "등급평점",
+    CASE
+        A.Grade WHEN 'A+' THEN 4.5
+              WHEN 'A' THEN 4.0
+              WHEN 'B+'  THEN 3.5
+              WHEN 'B' THEN 3.0
+              WHEN 'C+' THEN 2.5
+              WHEN 'C' THEN 2.0
+              WHEN 'D+' THEN 1.5
+              WHEN 'D' THEN 1.0 
+              ELSE 0.0 END * C.C_Number AS "과목평점"
+FROM
+    T_SG_Scores A
+    JOIN Student B
+        ON A.Student_ID = B.Student_ID
+    JOIN T_Course C 
+        ON A.Course_ID = C.Course_ID
+WHERE
+    A.Student_ID = 'C1802';
+
+
+-- 합계와 평균
+SELECT
+    B.DEPT_ID,
+    B.YEAR,
+    B.STUDENT_ID,
+    B.NAME,
+    COUNT(1)   AS "과목수",
+    SUM(A.SCORE) AS "총점",
+    TO_CHAR(ROUND(AVG(A.SCORE),2),'999.99') AS "평균"
+FROM T_SG_SCORES A
+    JOIN STUDENT B
+        ON A.STUDENT_ID = B.STUDENT_ID
+WHERE
+    A.SCORE IS NOT NULL
+GROUP BY
+    B.DEPT_ID,
+    B.YEAR,
+    B.STUDENT_ID,
+    B.NAME
+ORDER BY
+    TO_CHAR(ROUND(AVG(A.SCORE),2),'999.99') DESC;
+
+  
+-- 평균점수보다 높은 점수
+SELECT
+    *
+FROM
+    SG_SCORES
+WHERE
+        COURSE_ID = 'L1031'
+    AND SCORE > (
+                    SELECT
+                        AVG(SCORE)
+                    FROM
+                        SG_SCORES
+                 );
+  
+    
+-- 최고점을 받은 학생 
+SELECT
+    STUDENT_ID,
+    COURSE_ID,
+    SCORE,
+    SCORE_ASSIGNED
+FROM
+    SG_SCORES
+WHERE
+    SCORE = (
+        SELECT
+            MAX(SCORE)
+        FROM
+            SG_SCORES
+        WHERE
+            COURSE_ID = 'L1031'
+    );
+  
+    
+-- 최고점을 받은 학생의 성적 취득 년월
+SELECT
+    STUDENT_ID,
+    COURSE_ID,
+    SCORE,
+    TO_CHAR(SCORE_ASSIGNED, 'yy') AS "취득 년",
+    TO_CHAR(SCORE_ASSIGNED, 'mm') AS "취득 월"
+FROM
+    SG_SCORES
+WHERE
+    SCORE in  (
+        SELECT
+            MAX(SCORE)
+        FROM
+            SG_SCORES
+        GROUP BY
+            TO_CHAR(SCORE_ASSIGNED, 'yy'),
+            TO_CHAR(SCORE_ASSIGNED, 'mm')
+    );  
+    
+ 
+-- any 사용 / 최하 점수 보다 높은 점수 학생 출력
+SELECT
+    STUDENT_ID,
+    COURSE_ID,
+    SCORE,
+    SCORE_ASSIGNED
+FROM
+    SG_SCORES
+WHERE
+    SCORE > ANY (
+        SELECT
+            MIN(SCORE)
+        FROM
+            SG_SCORES
+        WHERE
+            COURSE_ID = 'L1031'
+    );
+ 
+     
+-- all 사용 / 년도별 최고 점수    
+SELECT
+    STUDENT_ID,
+    COURSE_ID,
+    SCORE,
+    SCORE_ASSIGNED
+FROM
+    SG_SCORES
+WHERE
+    SCORE >= ALL (
+        SELECT
+            MAX(SCORE)
+        FROM
+            SG_SCORES
+        GROUP BY
+            TO_CHAR(SCORE_ASSIGNED, 'yy')
+    );
+
+
+-- exists 사용 / 강의를 담당하지 않은 교수
+SELECT
+    *
+FROM
+    PROFESSOR A
+WHERE
+    EXISTS (
+        SELECT
+            *
+        FROM
+            COURSE B
+        WHERE
+            B.PROFESSOR_ID = A.PROFESSOR_ID
+    )
+    AND A.PROFESSOR_ID IS NOT NULL;
+
+
+-- select 서브쿼리로 조회
+SELECT
+    NAME,
+    DEPT_ID,
+    (
+        SELECT
+            COUNT(DEPT_ID)
+        FROM
+            PROFESSOR
+        WHERE
+            DEPT_ID = (
+                        SELECT
+                            DEPT_ID
+                        FROM
+                            PROFESSOR
+                        WHERE
+                            PROFESSOR_ID = 'P12'
+                        )
+    ) AS "소속 학과의 교수 수"
+FROM
+    PROFESSOR
+WHERE
+    PROFESSOR_ID = 'P12';
+
+
+
+-- 한 과목 초과 학점 취득자 > ??
+
+-- 총 취득 학점 ??
+
+-- Create select
+CREATE TABLE STUDENT_COMUPUTER
+    AS
+        SELECT
+            *
+        FROM
+            STUDENT
+        WHERE
+            DEPT_ID = '컴공';
+
+SELECT
+    *
+FROM
+    STUDENT_COMUPUTER;
+    
+    
+-- 주문처리(EC_Order) 테이블로부터 'jupark' 가 주문한 상품과 동일한 상품의 구매자수를 조회
+SELECT
+    COUNT(*) AS "구매자수"
+FROM
+    EC_ORDER
+WHERE
+    PRODUCT_CODE IN (
+        SELECT
+            PRODUCT_CODE
+        FROM
+            EC_ORDER
+        WHERE
+            ORDER_ID = 'jupark'
+    )
+    AND ORDER_ID <> 'jupark';
+
+
+-- 추가 수강료가 평균 수강료보다 높은 과목
+SELECT
+    AVG(COURSE_FEES)
+FROM
+    T_COURSE
+WHERE
+    COURSE_FEES > (
+        SELECT
+            AVG(COURSE_FEES)
+        FROM
+            T_COURSE
+    );
+
+
+-- any / 가장 낮은 금액보다 많은 과목을 추가수강료 역순
+SELECT
+    *
+FROM
+    T_COURSE
+WHERE
+    COURSE_FEES > ANY (
+        SELECT
+            MIN(COURSE_FEES)
+        FROM
+            T_COURSE
+    )
+ORDER BY
+    COURSE_FEES DESC;
+    
+    
+-- any 과목코드별 최고점    
+SELECT
+    COURSE_ID,
+    STUDENT_ID,
+    SCORE,
+    SCORE_ASSIGNED
+FROM
+    T_SG_SCORES
+WHERE
+    ( COURSE_ID, SCORE ) = ANY (
+                                SELECT
+                                    COURSE_ID, MAX(SCORE)
+                                FROM
+                                    T_SG_SCORES
+                                WHERE
+                                    TO_CHAR(SCORE_ASSIGNED, 'YY/MM') = '18/06'
+                                GROUP BY
+                                    COURSE_ID
+                             )
+ORDER BY
+    COURSE_ID;
+    
+
+-- exists 사용 / 한 명 이상 수강한 과목 과목코드순 출력
+SELECT
+    *
+FROM
+    T_Course A
+WHERE
+    EXISTS (
+                SELECT
+                    *
+                FROM T_SG_Scores B
+                WHERE B.Course_ID = A.Course_ID
+            )
+ORDER BY
+    A.COURSE_ID;
+    
+
+-- 한번도 수강하지 않은 과목    
+SELECT
+    *
+FROM
+    T_Course A
+WHERE
+    NOT EXISTS(
+                SELECT *
+                    FROM T_SG_Scores B
+                WHERE B.Course_ID = A.Course_ID
+                 )
+ORDER BY
+    A.COURSE_ID;   
