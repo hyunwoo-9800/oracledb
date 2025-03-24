@@ -73,7 +73,7 @@ SELECT
 FROM
     EMP A
     LEFT JOIN EMP B
-        ON A.MGR = B.MGR;
+        ON A.MGR = B.EMPNO;
 
 -- 사원번호와 관리자의 사원번호를 조회, 단 , 관리자가 없어도 조회
 SELECT
@@ -82,7 +82,7 @@ SELECT
 FROM
     EMP A
     LEFT JOIN EMP B
-        ON A.MGR = B.MGR;
+        ON A.MGR = B.EMPNO;
 
 -- 사원 이름과 사원이 다니는 부서명을 조회. 단, 사원이 존재하지 않는 부서는 부서명만 조회
 SELECT
@@ -190,9 +190,9 @@ SELECT
 FROM
     EMP A
 WHERE
-    A.MGR IN (
+    A.EMPNO IN (
                 SELECT
-                    B.EMPNO
+                    B.MGR
                 FROM
                     EMP B
              );
@@ -204,9 +204,4 @@ SELECT
 FROM
     EMP A
 WHERE
-    A.MGR NOT IN (
-                    SELECT
-                        B.EMPNO
-                    FROM
-                        EMP B
-                 );
+    A.MGR IS NOT NULL;

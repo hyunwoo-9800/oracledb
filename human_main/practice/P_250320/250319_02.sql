@@ -89,7 +89,8 @@ FROM
 -- Course 테이블의 Title과 Title 컬럼의 문자열 길이 정보를 문자열 길이 내림 차순으로 조회
 SELECT
     TITLE,
-    LENGTH(TITLE) AS "문자열 길이"
+    LENGTH(TITLE) AS "문자열 길이1",
+    LENGTHB(TITLE) AS "문자열 길이2"
 FROM
     COURSE
 ORDER BY
@@ -107,7 +108,8 @@ ORDER BY
 
 -- 'xyxyxHello' 문자열에서 'x' 나 'y' 문자를 제거하시오
 SELECT
-    REGEXP_REPLACE('xyxyxHello', 'x|y')
+    REGEXP_REPLACE('xyxyxHello', 'x|y'),
+    LTRIM('xyxyxHello', 'xy')
 FROM
     DUAL;
 
@@ -139,8 +141,8 @@ SELECT * FROM PROFESSOR;
 
 -- 12.345 의 값을 round(), trunc() 함수 사용하여 조회 
 SELECT
-    ROUND(12.345),
-    TRUNC(12.345)
+    ROUND(12.345, 2),
+    TRUNC(12.345, 2)
 FROM
     DUAL;
 
@@ -154,7 +156,8 @@ FROM
 -- 100을 3으로 나누어 몫과 나머지를 조회해 주세요
 SELECT
     100 / 3        AS "확인용 값",
-    TRUNC(100 / 3) AS "몫",
+    FLOOR(100 / 3) AS "몫1",
+    TRUNC(100 / 3) AS "몫2",
     MOD(100, 3)    AS "나머지"
 FROM
     DUAL;
@@ -163,14 +166,24 @@ FROM
 -- 위의 표를 참고하여 현재 날짜와 시간을 조회해 주세요
 SELECT
     TO_CHAR(SYSDATE, 'YYYY-mm-DD') AS "현재 날짜",
-    TO_CHAR(SYSDATE, 'HH:MI:SS')   AS "현재 시간"
+    TO_CHAR(SYSDATE, 'HH:MI:SS')   AS "현재 시간",
+    CURRENT_DATE,
+    CURRENT_TIMESTAMP
 FROM
     DUAL;
 
 -- 날짜형 형식을 'YYYY/MM/DD HH24:MI:SS'로 지정하여 시스템 날짜와 지역시간대의 날짜와 시간을 조회
+ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY/MM/DD HH24:MI:SS';
+
 SELECT
     TO_CHAR(CURRENT_TIMESTAMP, 'YYYY-mm-DD') AS "현재 날짜",
     TO_CHAR(CURRENT_TIMESTAMP, 'HH:MI:SS')   AS "현재 시간"
+FROM
+    DUAL;
+
+SELECT
+    SYSDATE,
+    CURRENT_TIMESTAMP
 FROM
     DUAL;
 
@@ -179,6 +192,13 @@ SELECT
     ADD_MONTHS(SYSDATE, 10) AS "10개월 뒤"
 FROM
     DUAL;
+
+SELECT
+    CURRENT_DATE,
+    ADD_MONTHS(CURRENT_DATE, 10) AS "10개월 뒤"
+FROM
+    DUAL;
+    
 
 -- Student 테이블의 '컴공' 학과 학생들에 대한 재적월수를 계산하여 조회. 기준일은 CURRENT_DATE 임.
 SELECT
@@ -193,6 +213,12 @@ SELECT
     SYSDATE + 4 / 24 AS "네 시간후"
 FROM
     DUAL;
+    
+SELECT
+    CURRENT_TIMESTAMP,
+    CURRENT_TIMESTAMP + NUMTODSINTERVAL(4, 'HOUR') AS "네 시간후"
+FROM
+    DUAL;    
 
 -- 'C1802' 학번의 '신지애' 학생이 2018년 7월 15일부로 1년간 휴학하였다. 복학 예정일을 조회해 주세요
 SELECT
@@ -204,6 +230,14 @@ FROM
 WHERE
     STUDENT_ID = 'C1802';
 
+SELECT
+    A.*,
+    '2018/07/15'                          AS "휴학 날짜",
+    TO_DATE('180715', 'YYMMDD') + NUMTOYMINTERVAL(1, 'YEAR') AS "복학 예정일"
+FROM
+    STUDENT A
+WHERE
+    STUDENT_ID = 'C1802';
 
 -- Student 테이블의 주민등록번호를 이용하여 생년월일을 추출하고, 날짜형 데이터로 'YYMMDD' 로 변환하여 'YYYY/MM/DD' 형식으로 조회
 SELECT
@@ -215,7 +249,8 @@ FROM
 
 -- 현재 날짜와 시간을 'YYYY-MM-DD HH24:MI:SS FF3' 형식으로 변환하여 조회
 SELECT
-    TO_TIMESTAMP(SYSDATE, 'YYYY-mm-DD HH24:MI:SS.FF3')
+    TO_TIMESTAMP(SYSDATE, 'YYYY-mm-DD HH24:MI:SS.FF3'),
+    TO_CHAR(CURRENT_TIMESTAMP, 'YYYY-mm-DD HH24:MI:SS.FF3')
 FROM
     DUAL;
 
@@ -244,7 +279,7 @@ SELECT
     COURSE_ID,
     SCORE,
     GRADE,
-    TO_CHAR(SCORE_ASSIGNED, 'YYYY-mm-DD') AS "성적 취득 일자"
+    TO_CHAR(SCORE_ASSIGNED, 'YYYY/mm/DD') AS "성적 취득 일자"
 FROM
     SG_SCORES
 WHERE
@@ -268,9 +303,10 @@ WHERE
 SELECT
     STUDENT_ID,
     COURSE_ID,
-    TO_CHAR(SCORE, 'S9999'),
-    TO_CHAR(SCORE, 'B9999'),
-    TO_CHAR(SCORE, '99.999'),
+    TO_CHAR(SCORE, 'S999'),
+    TO_CHAR(-SCORE, 'S999'),
+    TO_CHAR(SCORE, 'B999.9'),
+    TO_CHAR(SCORE, '099.99'),
     GRADE,
     SCORE_ASSIGNED
 FROM
@@ -339,9 +375,10 @@ FROM
 
 -- Student 테이블에서 학생의 전화번호, 이메일주소, 주소 순으로 대표 연락처를 조회
 SELECT
+    NAME,
     TELEPHONE,
     EMAIL,
-    ADDRESS
+   COALESCE(TELEPHONE, EMAIL, ADDRESS) AS "대표 연락처"
 FROM
     STUDENT;
 
@@ -456,22 +493,9 @@ SELECT
     TELEPHONE,
     ADDRESS,
     BUYCASH,
-    TIMESTAMP
-FROM
-    EC_MEMBER;
-
-SELECT
-    USERID,
-    PASSWD,
-    NAME,
-    REGIST_NO,
-    EMAIL,
-    TELEPHONE,
-    ADDRESS,
-    BUYCASH,
     TIMESTAMP    AS "가입일자",
-    TRUNC(MONTHS_BETWEEN(CURRENT_DATE, TIMESTAMP) / 12) || '년' || MOD(TRUNC(MONTHS_BETWEEN(CURRENT_DATE, TIMESTAMP)), 12) || '월' AS 가입기간,
-    CURRENT_DATE "기준일자"
+    TRUNC(MONTHS_BETWEEN(CURRENT_DATE, TIMESTAMP) / 12) || '년 ' || MOD(TRUNC(MONTHS_BETWEEN(CURRENT_DATE, TIMESTAMP)), 12) || '개월' AS 가입기간,
+    CURRENT_DATE AS "기준일자"
 FROM
     EC_MEMBER
 WHERE
@@ -518,6 +542,33 @@ SELECT
     SCORE_ASSIGNED
 FROM
     T_SG_SCORES;
+    
+-- 등급 산출
+UPDATE T_SG_SCORES
+SET GRADE = 
+        CASE
+            WHEN SCORE BETWEEN 95 AND 100 THEN
+                'A+'
+            WHEN SCORE BETWEEN 90 AND 94 THEN
+                'A'
+            WHEN SCORE BETWEEN 85 AND 89  THEN
+                'B+'
+            WHEN SCORE BETWEEN 80 AND 84  THEN
+                'B'
+            WHEN SCORE BETWEEN 75 AND 79  THEN
+                'C+'
+            WHEN SCORE BETWEEN 70 AND 74  THEN
+                'C'
+            WHEN SCORE BETWEEN 65 AND 69  THEN
+                'D+'    
+            WHEN SCORE BETWEEN 60 AND 64  THEN
+                'D'
+            ELSE
+                'F'
+        END
+WHERE
+    GRADE IS NULL;    
+    
 
 
 -- 수강임시(T_SG_Scroes)테이블에서 'C1801'학번의 성적을 5로 나누어 몫과 나머지를 계산하여 [학번, 과목코드, 성적, 몫, 나머지]를 출력하시오.
@@ -590,7 +641,8 @@ ORDER BY
 
 -- Student 테이블의 행의 수와 Email이 저장된 행의 수를 조회
 SELECT
-COUNT(*) AS CNT
+    COUNT(*) AS "전체 행",
+    COUNT(EMAIL) AS "이메일 행"
 FROM
     STUDENT
 WHERE
@@ -648,29 +700,40 @@ HAVING COUNT(DEPT_ID) = 1 ;
 -- SG_Scores 테이블에서 학번별의 8과목 이상을 취득한 학번의 과목수와 평균을 학번순으로 조회
 SELECT
     STUDENT_ID,
-    COURSE_ID,
-    AVG(SCORE) AS "평균"
+    COUNT(1) AS "취득 과목수",
+    TO_CHAR(AVG(SCORE), '99.99') AS "평균"
 FROM
     SG_SCORES
 GROUP BY
-STUDENT_ID,
-COURSE_ID;
+STUDENT_ID
+HAVING COUNT(1) >= 8
+ORDER BY 1;
 
 
 -- 학과별 학년별 인원수
+--SELECT
+--    DEPT_ID,
+--    COUNT(DEPT_ID) AS "학과별 인원수",
+--    CASE WHEN YEAR = 1 THEN CONCAT('1학년 인원수 ',COUNT(YEAR))
+--    WHEN YEAR = 2 THEN CONCAT('2학년 인원수 ', COUNT(YEAR))
+--    ELSE CONCAT('3학년 인원수 ', COUNT(YEAR))
+--     END AS "인원수"
+--FROM
+--    STUDENT
+--GROUP BY
+--    DEPT_ID,
+--    YEAR
+--ORDER BY
+--    YEAR;
+    
 SELECT
     DEPT_ID,
-    COUNT(DEPT_ID) AS "학과별 인원수",
-    CASE WHEN YEAR = 1 THEN CONCAT('1학년 인원수 ',COUNT(YEAR))
-    WHEN YEAR = 2 THEN CONCAT('2학년 인원수 ', COUNT(YEAR))
-    ELSE CONCAT('3학년 인원수 ', COUNT(YEAR))
-     END AS "인원수"
+    YEAR,
+    COUNT(*) AS "인원 수"
 FROM
     STUDENT
 GROUP BY
     DEPT_ID,
-    YEAR
-ORDER BY
     YEAR;
     
 
@@ -711,30 +774,30 @@ GROUP BY
     
 -- 과목 합계 평균 계산
 SELECT
-    Student_ID,
-    COUNT(1) AS "과목수",
-    SUM(Score) AS "총점",
-    AVG(Score) AS "평균"
+    STUDENT_ID,
+    COUNT(*) AS "과목수",
+    SUM(SCORE) AS "총점",
+    AVG(SCORE) AS "평균"
 FROM 
-    T_SG_Scores
+    T_SG_SCORES
 WHERE
-    Score IS NOT NULL
+    SCORE IS NOT NULL
 GROUP BY
-    STudent_ID;
+    STUDENT_ID;
     
     
 -- 게시물 행
 SELECT
     COUNT(*) AS "총게시물수"
 FROM
-    FRee_Board;
+    FREE_BOARD;
 SELECT
     CASE
         WHEN MAX(B_ID) IS NULL THEN 1
-        ELSE MAX(B_ID)+1
+        ELSE MAX(B_ID) + 1
     END AS "게시물번호"
 FROM
-    Free_BOARD;
+    FREE_BOARD;
     
     
 -- 담당하고 있는 과목
@@ -743,6 +806,7 @@ SELECT
     A.NAME,
     A.POSITION,
     A.DEPT_ID,
+    B.TITLE,
     B.C_NUMBER
 FROM
     PROFESSOR A
@@ -820,6 +884,18 @@ FROM
 ORDER BY
     A.MGR;
     
+SELECT
+    A.PROFESSOR_ID,
+    A.DEPT_ID,
+    A.DUTY,
+    A.NAME  ||   A.POSITION AS "교수명",
+    B.NAME  ||   B.DUTY AS "관리자명"
+FROM
+    PROFESSOR A
+    LEFT JOIN PROFESSOR B ON A.MGR = B.PROFESSOR_ID
+ORDER BY
+    A.MGR;   
+    
     
 -- 추가 수강료 5만원 담당 교수
 SELECT
@@ -831,6 +907,22 @@ FROM
     LEFT JOIN COURSE    B ON A.PROFESSOR_ID = B.PROFESSOR_ID
 WHERE
     B.COURSE_FEES = 50000;
+    
+SELECT
+    A.DEPT_ID,
+    A.NAME,
+    A.POSITION
+FROM
+    PROFESSOR A
+WHERE
+    EXISTS (
+            SELECT
+                *
+            FROM
+                COURSE B
+            WHERE A.PROFESSOR_ID = B.PROFESSOR_ID
+            AND COURSE_FEES = 50000
+            );
     
     
 -- 담당교수가 없는 과목
@@ -846,6 +938,14 @@ FROM
         ON A.PROFESSOR_ID = B.PROFESSOR_ID
 WHERE
     A.PROFESSOR_ID IS NULL;
+    
+    
+SELECT
+    *
+FROM
+    COURSE
+WHERE
+    PROFESSOR_ID NOT IN( SELECT PROFESSOR_ID FROM PROFESSOR);
 
 
 -- 한번 이상 거래한 회원
@@ -863,6 +963,18 @@ FROM
         ON B.PRODUCT_CODE = C.PRODUCT_CODE
 WHERE
     B.ORDER_QTY >= 1;
+    
+SELECT
+    A.NAME,
+    A.REGIST_NO,
+    B.ORDER_QTY,
+    B.CMONEY
+FROM
+    EC_MEMBER A
+    INNER JOIN EC_ORDER B
+        ON A.USERID = B.ORDER_ID
+WHERE
+    B.ORDER_QTY >= 1;    
 
 
 -- 한번도 주문하지 않은 회원
@@ -899,7 +1011,15 @@ WHERE
 
 -- C1801의 수강신청 과목
 SELECT
-    A.TITLE
+    C.DEPT_ID,
+    C.YEAR,
+    B.STUDENT_ID,
+    C.NAME,
+    B.COURSE_ID,
+    A.TITLE,
+    A.C_NUMBER,
+    B.GRADE,
+    B.SCORE
 FROM
     T_COURSE A
         JOIN T_SG_SCORES B
@@ -909,9 +1029,32 @@ FROM
 WHERE
     C.STUDENT_ID = 'C1801';
     
+SELECT
+    DEPT_ID,
+    YEAR,
+    STUDENT_ID,
+    NAME,
+    COURSE_ID,
+    TITLE,
+    C_NUMBER,
+    GRADE
+FROM T_SG_SCORES
+    INNER JOIN STUDENT USING(STUDENT_ID)
+    INNER JOIN T_COURSE USING(COURSE_ID)
+WHERE
+    STUDENT_ID = 'C1801';
+    
     
 -- C1801의 성적
 SELECT
+    C.DEPT_ID,
+    C.YEAR,
+    B.STUDENT_ID,
+    C.NAME,
+    B.COURSE_ID,
+    A.TITLE,
+    A.C_NUMBER,
+    B.GRADE,
     B.SCORE
 FROM
     T_COURSE A
@@ -922,6 +1065,20 @@ FROM
 WHERE
     C.STUDENT_ID = 'C1801'; 
     
+SELECT
+    DEPT_ID,
+    YEAR,
+    STUDENT_ID,
+    NAME,
+    COURSE_ID,
+    TITLE,
+    C_NUMBER,
+    GRADE
+FROM T_SG_SCORES
+    INNER JOIN STUDENT USING(STUDENT_ID)
+    INNER JOIN T_COURSE USING(COURSE_ID)
+WHERE
+    STUDENT_ID = 'C1801';    
 
 -- 평점
 SELECT 
@@ -958,6 +1115,39 @@ FROM
         ON A.Course_ID = C.Course_ID
 WHERE
     A.Student_ID = 'C1802';
+    
+SELECT 
+    Student_ID,
+    Course_ID,
+    Title,
+    C_Number AS "학점",
+    Grade,
+    CASE
+        Grade WHEN 'A+' THEN 4.5
+              WHEN 'A' THEN 4.0
+              WHEN 'B+' THEN 3.5
+              WHEN 'B' THEN 3.0
+              WHEN 'C+' THEN 2.5
+              WHEN 'C' THEN 2.0
+              WHEN 'D+' THEN 1.5
+              WHEN 'D' THEN 1.0
+              ELSE 0.0  END "등급평점",
+    CASE
+        Grade WHEN 'A+' THEN 4.5
+              WHEN 'A' THEN 4.0
+              WHEN 'B+'  THEN 3.5
+              WHEN 'B' THEN 3.0
+              WHEN 'C+' THEN 2.5
+              WHEN 'C' THEN 2.0
+              WHEN 'D+' THEN 1.5
+              WHEN 'D' THEN 1.0 
+              ELSE 0.0 END * C_Number AS "과목평점"
+FROM
+    T_SG_Scores 
+    JOIN Student USING(Student_ID)
+    JOIN T_Course USING(Course_ID)
+WHERE
+    Student_ID = 'C1802';    
 
 
 -- 합계와 평균
@@ -966,7 +1156,7 @@ SELECT
     B.YEAR,
     B.STUDENT_ID,
     B.NAME,
-    COUNT(1)   AS "과목수",
+    COUNT(*)   AS "과목수",
     SUM(A.SCORE) AS "총점",
     TO_CHAR(ROUND(AVG(A.SCORE),2),'999.99') AS "평균"
 FROM T_SG_SCORES A
@@ -1054,7 +1244,8 @@ WHERE
             SG_SCORES
         WHERE
             COURSE_ID = 'L1031'
-    );
+    )
+AND COURSE_ID = 'L1031';
  
      
 -- all 사용 / 년도별 최고 점수    
@@ -1091,6 +1282,21 @@ WHERE
             B.PROFESSOR_ID = A.PROFESSOR_ID
     )
     AND A.PROFESSOR_ID IS NOT NULL;
+    
+SELECT
+    *
+FROM
+    PROFESSOR A
+WHERE
+     NOT EXISTS (
+        SELECT
+            *
+        FROM
+            COURSE B
+        WHERE
+            B.PROFESSOR_ID = A.PROFESSOR_ID
+    )
+    AND A.PROFESSOR_ID IS NOT NULL;    
 
 
 -- select 서브쿼리로 조회
@@ -1120,8 +1326,52 @@ WHERE
 
 
 -- 한 과목 초과 학점 취득자 > ??
+SELECT
+    M.STUDENT_ID,
+    NAME,
+    COUNT(*) AS "취득 과목수",
+    (
+    SELECT
+        SUM(C_NUMBER)
+    FROM
+        SG_SCORES
+        INNER JOIN COURSE USING(COURSE_ID)
+    WHERE
+        STUDENT_ID = M.STUDENT_ID
+    GROUP BY
+        STUDENT_ID 
+    ) AS "취득 학점수"
+FROM SG_SCORES M
+INNER JOIN STUDENT S
+    ON M.STUDENT_ID = S.STUDENT_ID
+GROUP BY
+    M.STUDENT_ID,
+    NAME
+HAVING COUNT(*) > 1
+ORDER BY
+    4 DESC;
+
+
+
 
 -- 총 취득 학점 ??
+SELECT
+    STUDENT_ID,
+    SUM(C_NUMBER)
+FROM
+    SG_SCORES
+INNER JOIN COURSE USING(COURSE_ID)
+GROUP BY
+    STUDENT_ID
+HAVING SUM(C_NUMBER) > (
+                        SELECT
+                            SUM(C_NUMBER)
+                        FROM SG_SCORES
+                            INNER JOIN COURSE
+                                USING(COURSE_ID)
+                        WHERE STUDENT_ID = 'C1602'
+                        );
+
 
 -- Create select
 CREATE TABLE STUDENT_COMUPUTER
@@ -1154,6 +1404,23 @@ WHERE
             ORDER_ID = 'jupark'
     )
     AND ORDER_ID <> 'jupark';
+    
+SELECT
+    ORDER_ID,
+    PRODUCT_CODE,
+    (
+    SELECT
+        COUNT(*)
+    FROM
+        EC_ORDER A
+    WHERE
+        A.PRODUCT_CODE = B.PRODUCT_CODE
+    ) AS "동일상품 구매자수"
+FROM
+    EC_ORDER B
+WHERE
+    ORDER_ID = 'jupark';
+   
 
 
 -- 추가 수강료가 평균 수강료보다 높은 과목
@@ -1184,6 +1451,22 @@ WHERE
     )
 ORDER BY
     COURSE_FEES DESC;
+    
+SELECT
+    *
+FROM
+    T_COURSE
+WHERE
+    COURSE_ID LIKE 'L1%'
+    AND
+    COURSE_FEES > ANY (
+        SELECT
+            COURSE_FEES
+        FROM
+            T_COURSE
+    )
+ORDER BY
+    COURSE_FEES DESC;    
     
     
 -- any 과목코드별 최고점    

@@ -24,7 +24,8 @@ SELECT
 FROM
     EC_PRODUCT
 WHERE
-    UNIT_PRICE > 500000
+    PRODUCT_NAME = '프린터' AND
+    UNIT_PRICE >= 500000
 ORDER BY
     UNIT_PRICE DESC;
 
@@ -39,7 +40,7 @@ FROM
 WHERE
     NAME LIKE '정%';
 
--- 현금, 계좌이체 정보 출려
+-- 현금, 계좌이체 정보 출력
 SELECT
     ORDER_NO,
     PRODUCT_CODE,
@@ -48,7 +49,7 @@ SELECT
 FROM
     EC_ORDER
 WHERE
-    CSEL IN ( '신용카드', '현금입금' )
+    CSEL IN ( '계좌이체', '현금입금' )
 ORDER BY
     CSEL,
     CDATE;
@@ -80,7 +81,7 @@ SELECT
 FROM
     EC_PRODUCT
 WHERE
-    COMPANY NOT IN ( 'SAMSUNG', 'LG전자' )
+    COMPANY NOT IN ( 'SAMSUNG', 'LG전자', 'Samsung', 'samsung' )
 ORDER BY
     COMPANY,
     UNIT_PRICE;    
@@ -168,7 +169,7 @@ FROM
     EC_PRODUCT
 WHERE
     COMPANY LIKE 'LG%'
-    AND UNIT_PRICE > 800000
+    AND UNIT_PRICE >= 800000
 ORDER BY
     PRODUCT_CODE;
 
