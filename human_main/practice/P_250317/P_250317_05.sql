@@ -6,6 +6,8 @@ INSERT INTO Department VALUES ('컴공','컴퓨터공학과',  '765-4100');
 INSERT INTO Department VALUES ('정통','정보통신공학과','765-4200');
 INSERT INTO Department VALUES ('경영','경영학과',      '765-4400');
 INSERT INTO Department VALUES ('행정','세무행정학과',  '765-4500');
+
+
 /**
 Student 테이블 견본 데이터
 ***/
@@ -20,6 +22,8 @@ INSERT INTO Student  VALUES ('컴공','1','C1801','김대현','020121-3**','서�
 INSERT INTO Student  VALUES ('컴공','1','C1802','신지애','020521-4**','대전시 대덕구',  '010-6343-8838', 'c1802cyber.ac.kr',  'H', '2018/02/28');
 INSERT INTO Student  VALUES ('정통','1','T1801','김병호','991124-1**','대구시 달서구',  '011-1222-0303',  Null,               Null,'2018/02/28');
 INSERT INTO Student  VALUES ('경영','1','B1801','김빛나','030422-4**','서울시 은평구',  Null,             Null,               Null,'2018/02/28');
+
+
 /**
 Professor 테이블 견본 데이터
 ***/
@@ -33,6 +37,8 @@ INSERT INTO Professor VALUES ('P23', '이상혁', '조교수', '정통','765-421
 INSERT INTO Professor VALUES ('P24', '최경주', '조교수', '정통','765-4214','kjchoi@cyber.ac.kr', Null,    'P21');
 INSERT INTO Professor VALUES ('P41', '안연홍', '부교수', '경영','765-4411','yhahn@cyber.ac.kr', '학과장', 'P00');
 INSERT INTO Professor VALUES ('P51', '함영애', '부교수', '행정','765-4511','yaham@cyber.ac.kr', '학과장', 'P00');
+
+
 /**
 Course 테이블 견본 데이터
 ***/
@@ -51,6 +57,8 @@ INSERT INTO Course VALUES ('L1051','웹서버관리',    2,'P11',Null);
 INSERT INTO Course VALUES ('L1052','전자상거래',    3,'P22',30000);
 INSERT INTO Course VALUES ('L2031','게임이론',      3,'P23',50000);
 INSERT INTO Course VALUES ('L2061','스프링프레임워크',3, Null,50000);
+
+
 /**
 SG_Scores 테이블 견본 데이터
 ***/
@@ -87,6 +95,8 @@ INSERT INTO SG_Scores VALUES ('C1701','L2061',Null, Null, '2018/08/26');
 INSERT INTO SG_Scores VALUES ('C1702','L2061',Null, Null, '2018/08/26');
 INSERT INTO SG_Scores VALUES ('C1601','L2061',Null, Null, '2018/08/26'); 
 INSERT INTO SG_Scores VALUES ('C1602','L2061',Null, Null, '2018/08/26');
+
+
 /**
 T_Course 테이블 견본 데이터
 ***/
@@ -110,20 +120,11 @@ INSERT INTO SCORE_GRADE VALUES (70, 74,'C ');
 INSERT INTO SCORE_GRADE VALUES (65, 69,'D+');
 INSERT INTO SCORE_GRADE VALUES (60, 64,'D ');
 INSERT INTO SCORE_GRADE VALUES ( 0, 59,'F ');
-CREATE TABLE EC_Product (
-Product_Code    VARCHAR2(10),
-Product_Name    VARCHAR2(20)  NOT NULL,
-Standard        VARCHAR2(20),
-Unit            VARCHAR2(10),
-Unit_Price      NUMBER(7)     NOT NULL,
-Left_Qty        NUMBER(5),
-Company         VARCHAR2(20),
-ImageName       VARCHAR2(20),
-Info            VARCHAR2(80),
-Detail_Info     VARCHAR2(255),
-CONSTRAINT      EC_Product_pk PRIMARY KEY (Product_Code));
 
 
+/**********************************************************
+*  EC_Product 테이블 생성
+***********************************************************/
 CREATE TABLE EC_Product (
 Product_Code    VARCHAR2(10),
 Product_Name    VARCHAR2(20)  NOT NULL,
@@ -153,6 +154,7 @@ BuyCash        NUMBER(9)     DEFAULT  0,
 Timestamp      DATE          DEFAULT  SYSDATE,
 CONSTRAINT     EC_Member_pk  PRIMARY KEY (UserID) );
 
+
 /**********************************************************
 *  EC_Basket 테이블 생성
 ***********************************************************/
@@ -176,7 +178,7 @@ Order_No      VARCHAR2(10),
 Order_ID      VARCHAR2(10)   NOT NULL,
 Product_Code  VARCHAR2(10)   NOT NULL,
 Order_Qty     NUMBER(3)      NOT NULL,
-CSel          VARCHAR2(10),
+CSel          VARCHAR2(100),
 CMoney        NUMBER(9),
 CDate         DATE,
 MDate         DATE,
@@ -184,6 +186,7 @@ Gubun         VARCHAR2(10),
 CONSTRAINT    EC_Order_pk    PRIMARY KEY (Order_NO) );
 
 commit;
+alter table EC_Order modify (csel varchar(100));
 
 /**
 EC_Product 테이블 견본 데이터
@@ -230,16 +233,6 @@ INSERT INTO EC_Member VALUES ('uychoi','1234','최윤영','911010-2******',Null,
 /**
 EC_Basket 테이블 견본 데이터
 ***/
-INSERT INTO EC_Basket VALUES  ('180711001','usko', 'TV01',1,'2018/07/11');
-INSERT INTO EC_Basket VALUES  ('180711002','hskim','CM01',1,'2018/07/11');
-INSERT INTO EC_Basket VALUES  ('180711003','mskim','TV01',1,'2018/07/11');
-INSERT INTO EC_Basket VALUES  ('180711004','mhlee','NB02',1,'2018/07/11');
-INSERT INTO EC_Basket VALUES  ('180711005','mhlee','CM03',1,'2018/07/11');
-
-
-/**
-EC_Basket 테이블 견본 데이터
-***/
 INSERT INTO EC_Order VALUES ('180205001','usko',  'NB01', 1,'신용카드', 930000,'2018/02/15','2018/02/16','배달');
 INSERT INTO EC_Order VALUES ('180204001','supark','NB02', 1,'현금입금', 750000,'2018/02/24','2018/02/25','배달');
 INSERT INTO EC_Order VALUES ('180311001','supark','PRT01',1,'현금입금', 235000,'2018/03/11','2018/03/12','배달');
@@ -252,6 +245,3 @@ INSERT INTO EC_Order VALUES ('180505003','kcchoi','CH01', 1,'계좌이체',  700
 INSERT INTO EC_Order VALUES ('180707001','jupark','CM01', 5, Null,     3735000, Null,       Null,        Null);
 INSERT INTO EC_Order VALUES ('180707002','jupark','PRT02',5, Null,     4300000, Null,       Null,        Null);
 INSERT INTO EC_Order VALUES ('180707003','cscho', 'CM01' ,1, Null,      747000, Null,       Null,        Null);
-
-
-alter table EC_Order modify (csel varchar(100));

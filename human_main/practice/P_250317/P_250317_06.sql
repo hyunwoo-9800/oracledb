@@ -6,7 +6,7 @@ FROM
     T_COURSE;
 
 INSERT INTO T_COURSE VALUES ( 'L1061',
-                              'ERP 실문',
+                              'ERP 실무',
                               3,
                               'P12',
                               50000 );

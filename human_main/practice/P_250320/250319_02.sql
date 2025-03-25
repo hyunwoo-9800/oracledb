@@ -1096,7 +1096,7 @@ SELECT
               WHEN 'C' THEN 2.0
               WHEN 'D+' THEN 1.5
               WHEN 'D' THEN 1.0
-              ELSE 0.0  END "등급평점",
+              ELSE 0.0  END AS "등급평점",
     CASE
         A.Grade WHEN 'A+' THEN 4.5
               WHEN 'A' THEN 4.0
