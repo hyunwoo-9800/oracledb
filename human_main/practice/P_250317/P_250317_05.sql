@@ -121,6 +121,11 @@ INSERT INTO SCORE_GRADE VALUES (65, 69,'D+');
 INSERT INTO SCORE_GRADE VALUES (60, 64,'D ');
 INSERT INTO SCORE_GRADE VALUES ( 0, 59,'F ');
 
+drop table EC_Product;
+drop table EC_Member;
+drop table EC_Basket;
+drop table EC_Order;
+
 
 /**********************************************************
 *  EC_Product 테이블 생성
