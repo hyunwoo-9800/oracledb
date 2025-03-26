@@ -5,12 +5,16 @@ SELECT
 FROM
     EMPLOYEES A
      LEFT JOIN JOBS B
-        ON A.JOB_ID = B.JOB_ID;
+        ON A.JOB_ID = B.JOB_ID
 		
 select  first_name,job_id,salary, hire_date 
 from employees 
 where to_char(hire_date,'yyyy') = 2000 
-and job_id in ( select job_id from jobs where max_salary > 10000);
+and job_id in ( select job_id from jobs where max_salary > 10000)		
+		
+WHERE
+    A.HIRE_DATE > '1999/12/31'
+    AND B.MAX_SALARY > 10000;
 
 -- 매니저의 이름이 MICHAEL인 부서를 조회
 SELECT
