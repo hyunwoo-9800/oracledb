@@ -1,0 +1,70 @@
+-- 1번 문제
+-- T_PERSON_INFO 테이블 CREATE
+CREATE TABLE T_PERSON_INFO (
+    STUDENTNUMBER VARCHAR2(30) PRIMARY KEY NOT NULL,
+    STUDENTNAME   VARCHAR2(100),
+    STUDENTAGE    NUMBER(3),
+    STUDENTMAJOR  VARCHAR2(100)
+);
+
+-- 1번 문제
+-- T_PERSON_INFO 테이블에 INSERT
+INSERT INTO T_PERSON_INFO VALUES('20250034', '김지훈', 21, '법학과');
+INSERT INTO T_PERSON_INFO VALUES('20250011', '정지윤', 24, '물리학과');
+INSERT INTO T_PERSON_INFO VALUES('20250109', '강정섭', 20, '컴퓨터공학과');
+INSERT INTO T_PERSON_INFO VALUES('20250002', '최영범', 21, '건축학과');
+
+
+-- 2번문제
+-- board_list 테이블 CREATE
+CREATE TABLE BOARD_LIST (
+    BOARD_LIST_ID NUMBER(5) PRIMARY KEY NOT NULL,
+    TITLE         VARCHAR2(100) NOT NULL,
+    CONTENT       VARCHAR2(2000),
+    WRITER        VARCHAR2(20) NOT NULL,
+    CREATE_TIME   NUMBER(13) NOT NULL
+);
+
+
+-- 3번문제
+SELECT
+    EMP.EMPNO AS NO,
+    EMP.ENAME AS NAME,
+    EMP.SAL   AS SALARY,
+    DEP.DNAME AS D_NAME,
+    DEP.LOC   AS LOCATION
+FROM
+    EMP EMP
+     LEFT JOIN DEPT DEP
+        ON EMP.DEPTNO = DEP.DEPTNO
+WHERE
+    EMP.SAL >= 2000
+ORDER BY
+    EMP.SAL DESC;
+    
+    
+-- 4번문제
+
+-- 4-1번
+COMMIT;
+
+-- 4-2번
+ROLLBACK;
+
+
+-- 5번문제
+
+-- 5-1번
+-- DBMS명 : ORACLE
+
+-- 5-2번
+-- ip 주소 : localhost(192.168.0.1 or 127.0.0.1)
+
+-- 5-3번
+-- port 번호 : 1521 
+
+-- 5-4번
+-- 계정명 : hr
+
+-- 5-5번
+-- 비밀번호 : hr
