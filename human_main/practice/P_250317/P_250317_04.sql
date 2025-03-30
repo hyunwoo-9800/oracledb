@@ -47,6 +47,8 @@ CREATE TABLE PROFESSOR (
         REFERENCES DEPARTMENT
 );
 
+alter table PROFESSOR modify(POSITION  VARCHAR2(40));
+
 /**
 Course 테이블 생성
 ***/
